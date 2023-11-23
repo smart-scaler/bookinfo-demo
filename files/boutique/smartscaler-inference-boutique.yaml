@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rlautoscaler
+  labels:
+    apps: rlautoscaler
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rlautoscaler
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: rlautoscaler
+        version: v1
+    spec:
+      restartPolicy: Always
+      volumes:
+        - name: config-volume
+          configMap:
+            name: config-override
+      containers:
+        - name: autoscaler
+          image: aveshasystems/smart-scaler:v0.6.1
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/sh", "-c"]
+          # args:
+          # [
+          #   "wandb disabled & python policy/inference_script.py -c /data/pse_results/boutique-data/boutique_mesh_smart_scaler_config.json --no-smartscalerdb --mode mesh --restore -p /home/avesha/rl/rlautoscaler/checkpoint-6937/restored_checkpoint/checkpoint-6937 --inference-session bookinfo-1",
+          # ]
+          args: ["sleep infinity"]
+          resources:
+            requests:
+              memory: 2Gi
+              cpu: 1
+          volumeMounts:
+            - name: config-volume
+              mountPath: /data/config
+          ports:
+            - containerPort: 9900
+            - containerPort: 8265
+      imagePullSecrets:
+        - name: avesha-docker
+      #terminationGracePeriodSeconds: 30
+      # nodeSelector:
+      #   avesha/node-type: "rlautoscaler"
+      # tolerations:
+      # - key: "non-app-pods-no-schedule"
+      #   value: "true"
+      #   effect: "NoSchedule"

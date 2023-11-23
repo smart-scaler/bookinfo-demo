@@ -1,0 +1,29 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: frontend
+spec:
+  scaleTargetRef:
+    kind: Deployment
+    name: frontend
+  minReplicaCount: 1
+  maxReplicaCount: 20
+  cooldownPeriod: 5
+  pollingInterval: 1
+  advanced:
+    horizontalPodAutoscalerConfig:
+      behavior:
+        scaleDown:
+          stabilizationWindowSeconds: 60
+          policies:
+            - type: Percent
+              value: 50
+              periodSeconds: 180
+  triggers:
+    - type: prometheus
+      metadata:
+        serverAddress: http://prometheus-stack-kube-prom-prometheus.monitoring.svc.cluster.local:9090
+        metricName: hpa_num_pods
+        query: |
+          hpa_num_pods{kubernetes_pod_name="frontend"}
+        threshold: "1"

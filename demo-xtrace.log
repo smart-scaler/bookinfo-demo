@@ -1,0 +1,520 @@
+DOCKER_USER="<docker-username>"
+DOCKER_PASS="<docker-password>"
+
+======== Installing demo "environment"... k8s, istio, prometheus =============
+
++ curl -sL https://istio.io/downloadIstioctl
++ sh -
+
+Downloading istioctl-1.20.0 from https://github.com/istio/istio/releases/download/1.20.0/istioctl-1.20.0-linux-amd64.tar.gz ...
+istioctl-1.20.0-linux-amd64.tar.gz download complete!
+
+Add the istioctl to your path with:
+  export PATH=$HOME/.istioctl/bin:$PATH 
+
+Begin the Istio pre-installation check by running:
+         istioctl x precheck 
+
+Need more information? Visit https://istio.io/docs/reference/commands/istioctl/ 
++ istioctl x precheck
+See https://istio.io/v1.20/docs/reference/config/analysis for more information about causes and resolutions.
++ istioctl install -y
+
+The Kubernetes version v1.23.17-eks-4f4795d is not supported by Istio 1.20.0. The minimum supported Kubernetes version is 1.25.
+Proceeding with the installation, but you might experience problems. See https://istio.io/latest/docs/setup/platform-setup/ for a list of supported versions.
+
+✔ Istio core installed                                                                                                                                                    
+✔ Istiod installed                                                                                                                                                        
+✔ Ingress gateways installed                                                                                                                                                                                                   
+✔ Installation complete                                                                                                                                                                                                        Made this installation the default for injection and validation.
++ kubectl wait --for=condition=Ready pod -n istio-system -l app=istiod --timeout=5m
+pod/istiod-7f4954678c-88vsg condition met
++ echo 'Istio installation successful'
+Istio installation successful
++ echo 'Getting the pods in istio-system'
+Getting the pods in istio-system
++ kubectl get pods -n istio-system
+NAME                                   READY   STATUS    RESTARTS   AGE
+istio-ingressgateway-f55ff97fd-wgxv7   1/1     Running   0          13s
+istiod-7f4954678c-88vsg                1/1     Running   0          23s
++ kubectl create namespace monitoring
+namespace/monitoring created
++ helm install prometheus-pushgateway prometheus-community/prometheus-pushgateway -n monitoring --version 2.4.1
+NAME: prometheus-pushgateway
+LAST DEPLOYED: Tue Nov 21 07:09:53 2023
+NAMESPACE: monitoring
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+1. Get the application URL by running these commands:
+  export POD_NAME=$(kubectl get pods --namespace monitoring -l "app=prometheus-pushgateway,release=prometheus-pushgateway" -o jsonpath="{.items[0].metadata.name}")
+  echo "Visit http://127.0.0.1:9091 to use your application"
+  kubectl port-forward $POD_NAME 9091
++ helm install prometheus-stack -n monitoring ./kube-prometheus-stack/
+NAME: prometheus-stack
+LAST DEPLOYED: Tue Nov 21 07:10:02 2023
+NAMESPACE: monitoring
+STATUS: deployed
+REVISION: 1
+NOTES:
+kube-prometheus-stack has been installed. Check its status by running:
+  kubectl --namespace monitoring get pods -l "release=prometheus-stack"
+
+Visit https://github.com/prometheus-operator/kube-prometheus for instructions on how to create & configure Alertmanager and Prometheus instances using the Operator.
++ kubectl wait --for=condition=Ready pod -n monitoring -l app.kubernetes.io/instance=prometheus-stack-kube-prom-prometheus --timeout=5m
+pod/prometheus-prometheus-stack-kube-prom-prometheus-0 condition met
++ echo 'Prometheus installation successful$'
+Prometheus installation successful$
++ read -p 'Do you want to install keda? (y/N): ' INSTALL_KEDA
+Do you want to install keda? (y/N): y
++ '[' y = y ']'
++ helm repo add kedacore https://kedacore.github.io/charts
++ helm repo update kedacore
+Hang tight while we grab the latest from your chart repositories...
+...Successfully got an update from the "kedacore" chart repository
+Update Complete. ⎈Happy Helming!⎈
++ kubectl create namespace keda
+namespace/keda created
++ helm install keda kedacore/keda --namespace keda
+NAME: keda
+LAST DEPLOYED: Tue Nov 21 07:11:37 2023
+NAMESPACE: keda
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+:::^.     .::::^:     :::::::::::::::    .:::::::::.                   .^.                  
+7???~   .^7????~.     7??????????????.   :?????????77!^.              .7?7.                 
+7???~  ^7???7~.       ~!!!!!!!!!!!!!!.   :????!!!!7????7~.           .7???7.                
+7???~^7????~.                            :????:    :~7???7.         :7?????7.               
+7???7????!.           ::::::::::::.      :????:      .7???!        :7??77???7.              
+7????????7:           7???????????~      :????:       :????:      :???7?5????7.             
+7????!~????^          !77777777777^      :????:       :????:     ^???7?#P7????7.            
+7???~  ^????~                            :????:      :7???!     ^???7J#@J7?????7.           
+7???~   :7???!.                          :????:   .:~7???!.    ~???7Y&@#7777????7.          
+7???~    .7???7:      !!!!!!!!!!!!!!!    :????7!!77????7^     ~??775@@@GJJYJ?????7.         
+7???~     .!????^     7?????????????7.   :?????????7!~:      !????G@@@@@@@@5??????7:        
+::::.       :::::     :::::::::::::::    .::::::::..        .::::JGGGB@@@&7:::::::::        
+                                                                      ?@@#~                  
+                                                                      P@B^                   
+                                                                    :&G:                    
+                                                                    !5.                     
+                                                                    .Kubernetes Event-driven Autoscaling (KEDA) - Application autoscaling made simple.
+
+Get started by deploying Scaled Objects to your cluster:
+    - Information about Scaled Objects : https://keda.sh/docs/latest/concepts/
+    - Samples: https://github.com/kedacore/samples
+
+Get information about the deployed ScaledObjects:
+  kubectl get scaledobject [--namespace <namespace>]
+
+Get details about a deployed ScaledObject:
+  kubectl describe scaledobject <scaled-object-name> [--namespace <namespace>]
+
+Get information about the deployed ScaledObjects:
+  kubectl get triggerauthentication [--namespace <namespace>]
+
+Get details about a deployed ScaledObject:
+  kubectl describe triggerauthentication <trigger-authentication-name> [--namespace <namespace>]
+
+Get an overview of the Horizontal Pod Autoscalers (HPA) that KEDA is using behind the scenes:
+  kubectl get hpa [--all-namespaces] [--namespace <namespace>]
+-------------------------------------------------------------------------------------
+WARNING - Running on unsupported Kubernetes version "1.23+". KEDA 2.12 is supported and tested on Kubernetes "1.26" or higher. See https://keda.sh/docs/2.12/operate/cluster/ for details.
+-------------------------------------------------------------------------------------
+
+Learn more about KEDA:
+- Documentation: https://keda.sh/
+- Support: https://keda.sh/support/
+- File an issue: https://github.com/kedacore/keda/issues/new/choose
+++ kubectl get svc prometheus-stack-kube-prom-prometheus -n monitoring -o=json
++ SERVICE_INFO='{
+    "apiVersion": "v1",
+    "kind": "Service",
+    "metadata": {
+        "annotations": {
+            "meta.helm.sh/release-name": "prometheus-stack",
+            "meta.helm.sh/release-namespace": "monitoring"
+        },
+        "creationTimestamp": "2023-11-21T15:10:44Z",
+        "finalizers": [
+            "service.kubernetes.io/load-balancer-cleanup"
+        ],
+        "labels": {
+            "app": "kube-prometheus-stack-prometheus",
+            "app.kubernetes.io/instance": "prometheus-stack",
+            "app.kubernetes.io/managed-by": "Helm",
+            "app.kubernetes.io/part-of": "kube-prometheus-stack",
+            "app.kubernetes.io/version": "45.0.0",
+            "chart": "kube-prometheus-stack-45.0.0",
+            "heritage": "Helm",
+            "release": "prometheus-stack",
+            "self-monitor": "true"
+        },
+        "name": "prometheus-stack-kube-prom-prometheus",
+        "namespace": "monitoring",
+        "resourceVersion": "10265",
+        "uid": "4f85760e-1190-4760-bdac-1bbc20b38b5a"
+    },
+    "spec": {
+        "allocateLoadBalancerNodePorts": true,
+        "clusterIP": "172.20.182.218",
+        "clusterIPs": [
+            "172.20.182.218"
+        ],
+        "externalTrafficPolicy": "Cluster",
+        "internalTrafficPolicy": "Cluster",
+        "ipFamilies": [
+            "IPv4"
+        ],
+        "ipFamilyPolicy": "SingleStack",
+        "ports": [
+            {
+                "name": "http-web",
+                "nodePort": 30184,
+                "port": 9090,
+                "protocol": "TCP",
+                "targetPort": 9090
+            }
+        ],
+        "selector": {
+            "app.kubernetes.io/name": "prometheus",
+            "prometheus": "prometheus-stack-kube-prom-prometheus"
+        },
+        "sessionAffinity": "None",
+        "type": "LoadBalancer"
+    },
+    "status": {
+        "loadBalancer": {
+            "ingress": [
+                {
+                    "hostname": "a4f85760e11904760bdac1bbc20b38b5-899279862.us-east-1.elb.amazonaws.com"
+                }
+            ]
+        }
+    }
+}'
+++ echo '{
+    "apiVersion": "v1",
+    "kind": "Service",
+    "metadata": {
+        "annotations": {
+            "meta.helm.sh/release-name": "prometheus-stack",
+            "meta.helm.sh/release-namespace": "monitoring"
+        },
+        "creationTimestamp": "2023-11-21T15:10:44Z",
+        "finalizers": [
+            "service.kubernetes.io/load-balancer-cleanup"
+        ],
+        "labels": {
+            "app": "kube-prometheus-stack-prometheus",
+            "app.kubernetes.io/instance": "prometheus-stack",
+            "app.kubernetes.io/managed-by": "Helm",
+            "app.kubernetes.io/part-of": "kube-prometheus-stack",
+            "app.kubernetes.io/version": "45.0.0",
+            "chart": "kube-prometheus-stack-45.0.0",
+            "heritage": "Helm",
+            "release": "prometheus-stack",
+            "self-monitor": "true"
+        },
+        "name": "prometheus-stack-kube-prom-prometheus",
+        "namespace": "monitoring",
+        "resourceVersion": "10265",
+        "uid": "4f85760e-1190-4760-bdac-1bbc20b38b5a"
+    },
+    "spec": {
+        "allocateLoadBalancerNodePorts": true,
+        "clusterIP": "172.20.182.218",
+        "clusterIPs": [
+            "172.20.182.218"
+        ],
+        "externalTrafficPolicy": "Cluster",
+        "internalTrafficPolicy": "Cluster",
+        "ipFamilies": [
+            "IPv4"
+        ],
+        "ipFamilyPolicy": "SingleStack",
+        "ports": [
+            {
+                "name": "http-web",
+                "nodePort": 30184,
+                "port": 9090,
+                "protocol": "TCP",
+                "targetPort": 9090
+            }
+        ],
+        "selector": {
+            "app.kubernetes.io/name": "prometheus",
+            "prometheus": "prometheus-stack-kube-prom-prometheus"
+        },
+        "sessionAffinity": "None",
+        "type": "LoadBalancer"
+    },
+    "status": {
+        "loadBalancer": {
+            "ingress": [
+                {
+                    "hostname": "a4f85760e11904760bdac1bbc20b38b5-899279862.us-east-1.elb.amazonaws.com"
+                }
+            ]
+        }
+    }
+}'
+++ jq -r '.status.loadBalancer.ingress[0].hostname'
++ PROMETHEUS_EXTERNAL_IP=a4f85760e11904760bdac1bbc20b38b5-899279862.us-east-1.elb.amazonaws.com
+++ echo '{
+    "apiVersion": "v1",
+    "kind": "Service",
+    "metadata": {
+        "annotations": {
+            "meta.helm.sh/release-name": "prometheus-stack",
+            "meta.helm.sh/release-namespace": "monitoring"
+        },
+        "creationTimestamp": "2023-11-21T15:10:44Z",
+        "finalizers": [
+            "service.kubernetes.io/load-balancer-cleanup"
+        ],
+        "labels": {
+            "app": "kube-prometheus-stack-prometheus",
+            "app.kubernetes.io/instance": "prometheus-stack",
+            "app.kubernetes.io/managed-by": "Helm",
+            "app.kubernetes.io/part-of": "kube-prometheus-stack",
+            "app.kubernetes.io/version": "45.0.0",
+            "chart": "kube-prometheus-stack-45.0.0",
+            "heritage": "Helm",
+            "release": "prometheus-stack",
+            "self-monitor": "true"
+        },
+        "name": "prometheus-stack-kube-prom-prometheus",
+        "namespace": "monitoring",
+        "resourceVersion": "10265",
+        "uid": "4f85760e-1190-4760-bdac-1bbc20b38b5a"
+    },
+    "spec": {
+        "allocateLoadBalancerNodePorts": true,
+        "clusterIP": "172.20.182.218",
+        "clusterIPs": [
+            "172.20.182.218"
+        ],
+        "externalTrafficPolicy": "Cluster",
+        "internalTrafficPolicy": "Cluster",
+        "ipFamilies": [
+            "IPv4"
+        ],
+        "ipFamilyPolicy": "SingleStack",
+        "ports": [
+            {
+                "name": "http-web",
+                "nodePort": 30184,
+                "port": 9090,
+                "protocol": "TCP",
+                "targetPort": 9090
+            }
+        ],
+        "selector": {
+            "app.kubernetes.io/name": "prometheus",
+            "prometheus": "prometheus-stack-kube-prom-prometheus"
+        },
+        "sessionAffinity": "None",
+        "type": "LoadBalancer"
+    },
+    "status": {
+        "loadBalancer": {
+            "ingress": [
+                {
+                    "hostname": "a4f85760e11904760bdac1bbc20b38b5-899279862.us-east-1.elb.amazonaws.com"
+                }
+            ]
+        }
+    }
+}'
+++ jq -r '.spec.ports[0].port'
++ PROMETHEUS_PORT=9090
++ kubectl wait --for=condition=Ready pod -n monitoring -l app.kubernetes.io/name=grafana --timeout=5m
+pod/prometheus-stack-grafana-7868cf65b-5vbkk condition met
++ echo 'Grafana installation successful'
+Grafana installation successful
+++ kubectl get svc prometheus-stack-grafana -n monitoring -o=json
++ SERVICE_INFO='{
+    "apiVersion": "v1",
+    "kind": "Service",
+    "metadata": {
+        "annotations": {
+            "meta.helm.sh/release-name": "prometheus-stack",
+            "meta.helm.sh/release-namespace": "monitoring"
+        },
+        "creationTimestamp": "2023-11-21T15:10:44Z",
+        "finalizers": [
+            "service.kubernetes.io/load-balancer-cleanup"
+        ],
+        "labels": {
+            "app.kubernetes.io/instance": "prometheus-stack",
+            "app.kubernetes.io/managed-by": "Helm",
+            "app.kubernetes.io/name": "grafana",
+            "app.kubernetes.io/version": "9.3.6",
+            "helm.sh/chart": "grafana-6.50.7"
+        },
+        "name": "prometheus-stack-grafana",
+        "namespace": "monitoring",
+        "resourceVersion": "10226",
+        "uid": "84bad200-041a-4861-88d9-71edb1f2ec8f"
+    },
+    "spec": {
+        "allocateLoadBalancerNodePorts": true,
+        "clusterIP": "172.20.197.77",
+        "clusterIPs": [
+            "172.20.197.77"
+        ],
+        "externalTrafficPolicy": "Cluster",
+        "internalTrafficPolicy": "Cluster",
+        "ipFamilies": [
+            "IPv4"
+        ],
+        "ipFamilyPolicy": "SingleStack",
+        "ports": [
+            {
+                "name": "http-web",
+                "nodePort": 31785,
+                "port": 80,
+                "protocol": "TCP",
+                "targetPort": 3000
+            }
+        ],
+        "selector": {
+            "app.kubernetes.io/instance": "prometheus-stack",
+            "app.kubernetes.io/name": "grafana"
+        },
+        "sessionAffinity": "None",
+        "type": "LoadBalancer"
+    },
+    "status": {
+        "loadBalancer": {
+            "ingress": [
+                {
+                    "hostname": "a84bad200041a486188d971edb1f2ec8-1316656246.us-east-1.elb.amazonaws.com"
+                }
+            ]
+        }
+    }
+}'
+++ echo '{' '"apiVersion":' '"v1",' '"kind":' '"Service",' '"metadata":' '{' '"annotations":' '{' '"meta.helm.sh/release-name":' '"prometheus-stack",' '"meta.helm.sh/release-namespace":' '"monitoring"' '},' '"creationTimestamp":' '"2023-11-21T15:10:44Z",' '"finalizers":' '[' '"service.kubernetes.io/load-balancer-cleanup"' '],' '"labels":' '{' '"app.kubernetes.io/instance":' '"prometheus-stack",' '"app.kubernetes.io/managed-by":' '"Helm",' '"app.kubernetes.io/name":' '"grafana",' '"app.kubernetes.io/version":' '"9.3.6",' '"helm.sh/chart":' '"grafana-6.50.7"' '},' '"name":' '"prometheus-stack-grafana",' '"namespace":' '"monitoring",' '"resourceVersion":' '"10226",' '"uid":' '"84bad200-041a-4861-88d9-71edb1f2ec8f"' '},' '"spec":' '{' '"allocateLoadBalancerNodePorts":' true, '"clusterIP":' '"172.20.197.77",' '"clusterIPs":' '[' '"172.20.197.77"' '],' '"externalTrafficPolicy":' '"Cluster",' '"internalTrafficPolicy":' '"Cluster",' '"ipFamilies":' '[' '"IPv4"' '],' '"ipFamilyPolicy":' '"SingleStack",' '"ports":' '[' '{' '"name":' '"http-web",' '"nodePort":' 31785, '"port":' 80, '"protocol":' '"TCP",' '"targetPort":' 3000 '}' '],' '"selector":' '{' '"app.kubernetes.io/instance":' '"prometheus-stack",' '"app.kubernetes.io/name":' '"grafana"' '},' '"sessionAffinity":' '"None",' '"type":' '"LoadBalancer"' '},' '"status":' '{' '"loadBalancer":' '{' '"ingress":' '[' '{' '"hostname":' '"a84bad200041a486188d971edb1f2ec8-1316656246.us-east-1.elb.amazonaws.com"' '}' ']' '}' '}' '}'
+++ jq -r '.status.loadBalancer.ingress[0].hostname'
++ GRAFANA_EXTERNAL_IP=a84bad200041a486188d971edb1f2ec8-1316656246.us-east-1.elb.amazonaws.com
+++ echo '{' '"apiVersion":' '"v1",' '"kind":' '"Service",' '"metadata":' '{' '"annotations":' '{' '"meta.helm.sh/release-name":' '"prometheus-stack",' '"meta.helm.sh/release-namespace":' '"monitoring"' '},' '"creationTimestamp":' '"2023-11-21T15:10:44Z",' '"finalizers":' '[' '"service.kubernetes.io/load-balancer-cleanup"' '],' '"labels":' '{' '"app.kubernetes.io/instance":' '"prometheus-stack",' '"app.kubernetes.io/managed-by":' '"Helm",' '"app.kubernetes.io/name":' '"grafana",' '"app.kubernetes.io/version":' '"9.3.6",' '"helm.sh/chart":' '"grafana-6.50.7"' '},' '"name":' '"prometheus-stack-grafana",' '"namespace":' '"monitoring",' '"resourceVersion":' '"10226",' '"uid":' '"84bad200-041a-4861-88d9-71edb1f2ec8f"' '},' '"spec":' '{' '"allocateLoadBalancerNodePorts":' true, '"clusterIP":' '"172.20.197.77",' '"clusterIPs":' '[' '"172.20.197.77"' '],' '"externalTrafficPolicy":' '"Cluster",' '"internalTrafficPolicy":' '"Cluster",' '"ipFamilies":' '[' '"IPv4"' '],' '"ipFamilyPolicy":' '"SingleStack",' '"ports":' '[' '{' '"name":' '"http-web",' '"nodePort":' 31785, '"port":' 80, '"protocol":' '"TCP",' '"targetPort":' 3000 '}' '],' '"selector":' '{' '"app.kubernetes.io/instance":' '"prometheus-stack",' '"app.kubernetes.io/name":' '"grafana"' '},' '"sessionAffinity":' '"None",' '"type":' '"LoadBalancer"' '},' '"status":' '{' '"loadBalancer":' '{' '"ingress":' '[' '{' '"hostname":' '"a84bad200041a486188d971edb1f2ec8-1316656246.us-east-1.elb.amazonaws.com"' '}' ']' '}' '}' '}'
+++ jq -r '.spec.ports[0].port'
++ GRAFANA_PORT=80
++ kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+serviceaccount/metrics-server created
+clusterrole.rbac.authorization.k8s.io/system:aggregated-metrics-reader created
+clusterrole.rbac.authorization.k8s.io/system:metrics-server created
+rolebinding.rbac.authorization.k8s.io/metrics-server-auth-reader created
+clusterrolebinding.rbac.authorization.k8s.io/metrics-server:system:auth-delegator created
+clusterrolebinding.rbac.authorization.k8s.io/system:metrics-server created
+service/metrics-server created
+deployment.apps/metrics-server created
+apiservice.apiregistration.k8s.io/v1beta1.metrics.k8s.io created
++ kubectl apply -f ./files/prom-dataplane.yaml -n monitoring
+servicemonitor.monitoring.coreos.com/prometheus-oper-istio-dataplane created
++ kubectl apply -f ./files/prom-controlplane.yaml -n monitoring
+servicemonitor.monitoring.coreos.com/prometheus-oper-istio-controlplane created
+
+======== Installing demo app... bookinfo and locust traffic generator ============
+
++ echo 'Creating new namespace demo'
+Creating new namespace demo
++ kubectl create ns demo
+namespace/demo created
++ echo 'Labeling namespace demo with istio-injection=enabled'
+Labeling namespace demo with istio-injection=enabled
++ kubectl label namespace demo istio-injection=enabled --overwrite
+namespace/demo labeled
++ echo 'Installing bookinfo application '
+Installing bookinfo application 
++ echo 'Installing bookinfo app...'
+Installing bookinfo app...
++ kubectl apply -f ./files/bookinfo.yaml -n demo
+service/details created
+serviceaccount/bookinfo-details created
+deployment.apps/details-v1 created
+service/ratings created
+serviceaccount/bookinfo-ratings created
+deployment.apps/ratings-v1 created
+service/reviews created
+serviceaccount/bookinfo-reviews created
+deployment.apps/reviews-v1 created
+deployment.apps/reviews-v2 created
+deployment.apps/reviews-v3 created
+service/productpage created
+serviceaccount/bookinfo-productpage created
+deployment.apps/productpage-v1 created
++ echo 'Starting load for bookinfo app ...'
+Starting load for bookinfo app ...
++ kubectl apply -f ./files/bookinfo-loadgen.yaml -n demo
+deployment.apps/bookinfo-locust created
+configmap/bookinfo-locustfile created
++ echo 'Waiting for bookinfo app to come up...'
+Waiting for bookinfo app to come up...
++ echo 'Check if all pods are running with 2 containers'
+Check if all pods are running with 2 containers
++ kubectl -n demo wait --for=condition=Ready pod --all
+pod/details-v1-79764cddcd-qzsd5 condition met
+pod/productpage-v1-57df555c79-kztsc condition met
+pod/ratings-v1-56446dd79d-zgvrb condition met
+pod/reviews-v1-7cb5d5d784-hj5jn condition met
+pod/reviews-v2-5f88755f46-dqw8t condition met
+pod/reviews-v3-7b48d89c5b-wdhps condition met
+error: timed out waiting for the condition on pods/bookinfo-locust-5dc9888fb4-mg6l6
++ echo 'Applying HPA for bookinfo app...'
+Applying HPA for bookinfo app...
++ kubectl apply -f ./files/bookinfo-cpu-hpa.yaml -n demo
+scaledobject.keda.sh/productpage-v1 created
+scaledobject.keda.sh/ratings-v1 created
+scaledobject.keda.sh/reviews-v1 created
+scaledobject.keda.sh/reviews-v2 created
+scaledobject.keda.sh/reviews-v3 created
+scaledobject.keda.sh/details-v1 created
++ echo 'Waiting for bookinfo app to scale...'
+Waiting for bookinfo app to scale...
++ sleep 120
++ echo 'Do you want to continue with the installation of smart-scaler? (yes/no)'
+Do you want to continue with the installation of smart-scaler? (yes/no)
++ read user_input
+yes
++ '[' yes '!=' yes ']'
+
+======== Installing smart scaler to manage bookinfo =======
+
++ echo 'Creating namespace smart-scaler...'
+Creating namespace smart-scaler...
++ kubectl create ns smart-scaler
+namespace/smart-scaler created
++ echo 'Creating docker registry secret...'
+Creating docker registry secret...
++ kubectl create secret docker-registry avesha-docker --namespace smart-scaler --docker-username=${DOCKER_USER} --docker-password=${DOCKER_PASS}
+secret/avesha-docker created
++ echo 'Creating configmap from file...'
+Creating configmap from file...
++ kubectl create configmap config-override --from-file=files/override_config.json -n smart-scaler
+configmap/config-override created
++ echo 'Applying smartscaler-inference.yaml...'
+Applying smartscaler-inference.yaml...
++ kubectl -n smart-scaler apply -f ./files/smartscaler-inference.yaml
+deployment.apps/rlautoscaler created
++ echo 'Switching from autoscaling to smart-scaler...'
+Switching from autoscaling to smart-scaler...
++ kubectl -n demo apply -f ./files/rl-keda.yaml
+scaledobject.keda.sh/details-v1 configured
+scaledobject.keda.sh/productpage-v1 configured
+scaledobject.keda.sh/ratings-v1 configured
+scaledobject.keda.sh/reviews-v1 configured
+scaledobject.keda.sh/reviews-v2 configured
+scaledobject.keda.sh/reviews-v3 configured
++ echo 'Prometheus URL is http://a4f85760e11904760bdac1bbc20b38b5-899279862.us-east-1.elb.amazonaws.com:9090'
+Prometheus URL is http://a4f85760e11904760bdac1bbc20b38b5-899279862.us-east-1.elb.amazonaws.com:9090
++ echo 'Grafana URL is http://a84bad200041a486188d971edb1f2ec8-1316656246.us-east-1.elb.amazonaws.com:80'
+Grafana URL is http://a84bad200041a486188d971edb1f2ec8-1316656246.us-east-1.elb.amazonaws.com:80
++ echo 'Default Username and Password is admin, please visit the URL and change it.'
+Default Username and Password is admin, please visit the URL and change it.
++ echo 'Installation complete!'
+Installation complete!

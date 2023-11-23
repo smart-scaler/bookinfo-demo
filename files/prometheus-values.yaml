@@ -1,0 +1,28 @@
+server:
+  service:
+    type: NodePort
+    ports:
+    - port: 32270
+      targetPort: 9090
+  global:
+    scrape_interval: 15s
+    scrape_timeout: 10s
+    evaluation_interval: 15s
+  persistentVolume:
+    size: 16Gi
+
+pushgateway:
+  service:
+    type: NodePort
+    ports:
+    - port: 32290
+      targetPort: 9091
+  
+  resources: 
+    limits:
+      cpu: 10m
+      memory: 32Mi
+    requests:
+      cpu: 10m
+      memory: 32Mi
+  

@@ -1,0 +1,298 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+ name: currencyservice
+spec:
+ scaleTargetRef:
+   kind: Deployment
+   name: currencyservice
+ minReplicaCount: 1
+ maxReplicaCount: 20
+ cooldownPeriod: 5
+ pollingInterval: 1
+ advanced:
+    horizontalPodAutoscalerConfig:
+       behavior:
+         scaleDown:
+           stabilizationWindowSeconds: 60
+           policies:
+           - type: Percent
+             value: 50
+             periodSeconds: 120
+ triggers:
+ - type: cpu
+   metadata:
+     type: Utilization
+     value: "50"
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+ name: adservice
+spec:
+ scaleTargetRef:
+   kind: Deployment
+   name: adservice
+ minReplicaCount: 1
+ maxReplicaCount: 20
+ cooldownPeriod: 5
+ pollingInterval: 1
+ advanced:
+    horizontalPodAutoscalerConfig:
+       behavior:
+         scaleDown:
+           stabilizationWindowSeconds: 60
+           policies:
+           - type: Percent
+             value: 50
+             periodSeconds: 120
+ triggers:
+ - type: cpu
+   metadata:
+     type: Utilization
+     value: "50"
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+ name: cartservice
+spec:
+ scaleTargetRef:
+   kind: Deployment
+   name: cartservice
+ minReplicaCount: 1
+ maxReplicaCount: 20
+ cooldownPeriod: 5
+ pollingInterval: 1
+ advanced:
+    horizontalPodAutoscalerConfig:
+       behavior:
+         scaleDown:
+           stabilizationWindowSeconds: 60
+           policies:
+           - type: Percent
+             value: 50
+             periodSeconds: 120
+ triggers:
+ - type: cpu
+   metadata:
+     type: Utilization
+     value: "50"
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+ name: checkoutservice
+spec:
+ scaleTargetRef:
+   kind: Deployment
+   name: checkoutservice
+ minReplicaCount: 1
+ maxReplicaCount: 20
+ cooldownPeriod: 5
+ pollingInterval: 1
+ advanced:
+    horizontalPodAutoscalerConfig:
+       behavior:
+         scaleDown:
+           stabilizationWindowSeconds: 60
+           policies:
+           - type: Percent
+             value: 50
+             periodSeconds: 120
+ triggers:
+ - type: cpu
+   metadata:
+     type: Utilization
+     value: "50"
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+ name: emailservice
+spec:
+ scaleTargetRef:
+   kind: Deployment
+   name: emailservice
+ minReplicaCount: 1
+ maxReplicaCount: 20
+ cooldownPeriod: 5
+ pollingInterval: 1
+ advanced:
+    horizontalPodAutoscalerConfig:
+       behavior:
+         scaleDown:
+           stabilizationWindowSeconds: 60
+           policies:
+           - type: Percent
+             value: 50
+             periodSeconds: 120
+ triggers:
+ - type: cpu
+   metadata:
+     type: Utilization
+     value: "50"
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+ name: frontend
+spec:
+ scaleTargetRef:
+   kind: Deployment
+   name: frontend
+ minReplicaCount: 1
+ maxReplicaCount: 20
+ cooldownPeriod: 5
+ pollingInterval: 1
+ advanced:
+    horizontalPodAutoscalerConfig:
+       behavior:
+         scaleDown:
+           stabilizationWindowSeconds: 60
+           policies:
+           - type: Percent
+             value: 50
+             periodSeconds: 120
+ triggers:
+ - type: cpu
+   metadata:
+     type: Utilization
+     value: "50"
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+ name: paymentservice
+spec:
+ scaleTargetRef:
+   kind: Deployment
+   name: paymentservice
+ minReplicaCount: 1
+ maxReplicaCount: 20
+ cooldownPeriod: 5
+ pollingInterval: 1
+ advanced:
+    horizontalPodAutoscalerConfig:
+       behavior:
+         scaleDown:
+           stabilizationWindowSeconds: 60
+           policies:
+           - type: Percent
+             value: 50
+             periodSeconds: 120
+ triggers:
+ - type: cpu
+   metadata:
+     type: Utilization
+     value: "50"
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+ name: productcatalogservice
+spec:
+ scaleTargetRef:
+   kind: Deployment
+   name: productcatalogservice
+ minReplicaCount: 1
+ maxReplicaCount: 20
+ cooldownPeriod: 5
+ pollingInterval: 1
+ advanced:
+    horizontalPodAutoscalerConfig:
+       behavior:
+         scaleDown:
+           stabilizationWindowSeconds: 60
+           policies:
+           - type: Percent
+             value: 50
+             periodSeconds: 120
+ triggers:
+ - type: cpu
+   metadata:
+     type: Utilization
+     value: "50"
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+ name: recommendationservice
+spec:
+ scaleTargetRef:
+   kind: Deployment
+   name: recommendationservice
+ minReplicaCount: 1
+ maxReplicaCount: 20
+ cooldownPeriod: 5
+ pollingInterval: 1
+ advanced:
+    horizontalPodAutoscalerConfig:
+       behavior:
+         scaleDown:
+           stabilizationWindowSeconds: 60
+           policies:
+           - type: Percent
+             value: 50
+             periodSeconds: 120
+ triggers:
+ - type: cpu
+   metadata:
+     type: Utilization
+     value: "50"
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+ name: redis-cart
+spec:
+ scaleTargetRef:
+   kind: Deployment
+   name: redis-cart
+ minReplicaCount: 1
+ maxReplicaCount: 20
+ cooldownPeriod: 5
+ pollingInterval: 1
+ advanced:
+    horizontalPodAutoscalerConfig:
+       behavior:
+         scaleDown:
+           stabilizationWindowSeconds: 60
+           policies:
+           - type: Percent
+             value: 50
+             periodSeconds: 120
+ triggers:
+ - type: cpu
+   metadata:
+     type: Utilization
+     value: "50"
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+ name: shippingservice
+spec:
+ scaleTargetRef:
+   kind: Deployment
+   name: shippingservice
+ minReplicaCount: 1
+ maxReplicaCount: 20
+ cooldownPeriod: 5
+ pollingInterval: 1
+ advanced:
+    horizontalPodAutoscalerConfig:
+       behavior:
+         scaleDown:
+           stabilizationWindowSeconds: 60
+           policies:
+           - type: Percent
+             value: 50
+             periodSeconds: 120
+ triggers:
+ - type: cpu
+   metadata:
+     type: Utilization
+     value: "50"
+---
+

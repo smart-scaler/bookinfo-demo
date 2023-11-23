@@ -1,0 +1,95 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bookinfo-locust
+  namespace: demo
+spec:
+  selector:
+    matchLabels:
+      app: bookinfo-locust
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: bookinfo-locust
+    spec:
+      terminationGracePeriodSeconds: 5
+      restartPolicy: Always
+      volumes:
+        - name: bookinfo-locustfile
+          configMap:
+            name: bookinfo-locustfile
+      containers:
+        - name: main
+          image: locustio/locust:2.18.1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8089
+          env:
+          command:
+            - locust
+          args:
+            [
+              "-f",
+              "/mnt/locust/locustfile.py",
+              "--headless",
+              "--host=http://productpage.demo.svc.cluster.local:9080",
+            ]
+          resources:
+            requests:
+              cpu: 300m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          volumeMounts:
+            - name: bookinfo-locustfile
+              mountPath: /mnt/locust
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: bookinfo-locustfile
+  namespace: demo
+data:
+  locustfile.py: |
+    from locust import HttpUser, TaskSet, task, constant, constant_throughput
+    from locust import LoadTestShape, FastHttpUser
+
+    import urllib.error
+    import traceback
+    #import rlautoscaler.utils.logger as Log
+    import logging as log
+
+    class UserTasks(TaskSet):
+        """
+        Locust user task set.
+        """
+
+        @task
+        def get_site(self):
+            self.client.get("/productpage")
+
+
+    class User(FastHttpUser):
+        """
+        A locust user class that will be hatched and run by the locust runner.
+        """
+
+        tasks = {UserTasks}
+        wait_time = constant_throughput(1)
+        connection_timeout = 1.0
+        network_timeout = 1.0
+
+    class CustomShape(LoadTestShape):
+        """
+        docstring
+        """
+        step_time = 60
+        def tick(self):
+            run_time = self.get_run_time()
+            current_user = run_time //60
+            from math import sin, cos
+            user_num = int(240+ 36*(cos(4*current_user/6) + (5*sin(4*current_user/30))))
+            return (user_num, 50)

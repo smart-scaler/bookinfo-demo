@@ -1,0 +1,179 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: details-v1
+spec:
+  scaleTargetRef:
+    kind: Deployment
+    name: details-v1
+  minReplicaCount: 1
+  maxReplicaCount: 100
+  cooldownPeriod: 5
+  pollingInterval: 1
+  advanced:
+    horizontalPodAutoscalerConfig:
+      behavior:
+        scaleDown:
+          stabilizationWindowSeconds: 60
+          policies:
+            - type: Percent
+              value: 50
+              periodSeconds: 120
+  triggers:
+    - type: prometheus
+      metadata:
+        serverAddress: http://prometheus-stack-kube-prom-prometheus.monitoring.svc.cluster.local:9090
+        metricName: hpa_num_pods
+        query: |
+          hpa_num_pods{kubernetes_pod_name="details-v1"}
+        threshold: "1"
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: productpage-v1
+spec:
+  scaleTargetRef:
+    kind: Deployment
+    name: productpage-v1
+  minReplicaCount: 1
+  maxReplicaCount: 100
+  cooldownPeriod: 5
+  pollingInterval: 1
+  advanced:
+    horizontalPodAutoscalerConfig:
+      behavior:
+        scaleDown:
+          stabilizationWindowSeconds: 60
+          policies:
+            - type: Percent
+              value: 50
+              periodSeconds: 120
+  triggers:
+    - type: prometheus
+      metadata:
+        serverAddress: http://prometheus-stack-kube-prom-prometheus.monitoring.svc.cluster.local:9090
+        metricName: hpa_num_pods
+        query: |
+          hpa_num_pods{kubernetes_pod_name="productpage-v1"}
+        threshold: "1"
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: ratings-v1
+spec:
+  scaleTargetRef:
+    kind: Deployment
+    name: ratings-v1
+  minReplicaCount: 1
+  maxReplicaCount: 100
+  cooldownPeriod: 5
+  pollingInterval: 1
+  advanced:
+    horizontalPodAutoscalerConfig:
+      behavior:
+        scaleDown:
+          stabilizationWindowSeconds: 60
+          policies:
+            - type: Percent
+              value: 50
+              periodSeconds: 120
+  triggers:
+    - type: prometheus
+      metadata:
+        serverAddress: http://prometheus-stack-kube-prom-prometheus.monitoring.svc.cluster.local:9090
+        metricName: hpa_num_pods
+        query: |
+          hpa_num_pods{kubernetes_pod_name="ratings-v1"}
+        threshold: "1"
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: reviews-v1
+spec:
+  scaleTargetRef:
+    kind: Deployment
+    name: reviews-v1
+  minReplicaCount: 1
+  maxReplicaCount: 100
+  cooldownPeriod: 5
+  pollingInterval: 1
+  advanced:
+    horizontalPodAutoscalerConfig:
+      behavior:
+        scaleDown:
+          stabilizationWindowSeconds: 60
+          policies:
+            - type: Percent
+              value: 50
+              periodSeconds: 120
+  triggers:
+    - type: prometheus
+      metadata:
+        serverAddress: http://prometheus-stack-kube-prom-prometheus.monitoring.svc.cluster.local:9090
+        metricName: hpa_num_pods
+        query: |
+          hpa_num_pods{kubernetes_pod_name="reviews-v1"}
+        threshold: "1"
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: reviews-v2
+spec:
+  scaleTargetRef:
+    kind: Deployment
+    name: reviews-v2
+  minReplicaCount: 1
+  maxReplicaCount: 100
+  cooldownPeriod: 5
+  pollingInterval: 1
+  advanced:
+    horizontalPodAutoscalerConfig:
+      behavior:
+        scaleDown:
+          stabilizationWindowSeconds: 60
+          policies:
+            - type: Percent
+              value: 50
+              periodSeconds: 120
+  triggers:
+    - type: prometheus
+      metadata:
+        serverAddress: http://prometheus-stack-kube-prom-prometheus.monitoring.svc.cluster.local:9090
+        metricName: hpa_num_pods
+        query: |
+          hpa_num_pods{kubernetes_pod_name="reviews-v2"}
+        threshold: "1"
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: reviews-v3
+spec:
+  scaleTargetRef:
+    kind: Deployment
+    name: reviews-v3
+  minReplicaCount: 1
+  maxReplicaCount: 100
+  cooldownPeriod: 5
+  pollingInterval: 1
+  advanced:
+    horizontalPodAutoscalerConfig:
+      behavior:
+        scaleDown:
+          stabilizationWindowSeconds: 60
+          policies:
+            - type: Percent
+              value: 50
+              periodSeconds: 120
+  triggers:
+    - type: prometheus
+      metadata:
+        serverAddress: http://prometheus-stack-kube-prom-prometheus.monitoring.svc.cluster.local:9090
+        metricName: hpa_num_pods
+        query: |
+          hpa_num_pods{kubernetes_pod_name="reviews-v3"}
+        threshold: "1"
