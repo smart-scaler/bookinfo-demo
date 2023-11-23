@@ -1,10 +1,15 @@
 # Setup
 
 🚀 Make sure cluster autoscaling (adding/deleting of the nodes) is turned on, to accommodate variable load traffic."
+<br>
 📦 Make sure the nodes have enough capacity."
+<br>
 🔀 Include examples to port-forward Grafana svc. For example: kubectl port-forward svc/grafana 3000:3000 -n grafana"
-🎯 Make sure that Prometheus is configured to scrape data from pushgateway and istio (as a target source)"
+<br>
+🎯 Make sure that Prometheus is configured to scrape data from pushgateway and istio (as a target source)
+<br>
 🔗 Change the prometheus and pushgw urls in override config file"
+<br>
 🔗 Please ensure to change the image name in smartscaler-inference.yaml"
 
 ## Cluster Setup
