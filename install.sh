@@ -15,18 +15,21 @@ echo "   For k8s v1.27, use: helm install keda kedacore/keda --namespace keda --
 echo "🔀 4. Include examples to port-forward Grafana svc. For example: kubectl port-forward svc/grafana 3000:3000 -n grafana"
 echo "🎯 5. Make sure that Prometheus is configured to scrape data from pushgateway and istio (as a target source)"
 echo "🔗 6. Change the prometheus and pushgw urls in override config file"
+echo "🔗 7. Please ensure to change the image name in smartscaler-inference.yaml"
 
 echo -e "🖥️ Capacity:
   - CPU: 4
   - Ephemeral Storage: 52,416,492Ki
   - Memory: 16,181,724Ki
   - Pods: 58
+  - node.kubernetes.io/instance-type=t3.xlarge
 
 📊 Allocatable:
   - CPU: 3920m
   - Ephemeral Storage: 47,233,329,7124
   - Memory: 15,164,892Ki
-- Pods: 58"
+  - Pods: 58
+- node.kubernetes.io/instance-type=t3.xlarge"
 
 
 GREEN=$(tput setaf 2)
@@ -209,6 +212,7 @@ echo "📁 Creating configmap from file..."
 kubectl create configmap config-override --from-file=files/override_config.json -n smart-scaler
 
 echo "🚀 Applying smartscaler-inference.yaml..."
+echo "⚠️ Please ensure to change the image name in smartscaler-inference.yaml before proceeding."
 kubectl -n smart-scaler apply -f ./files/smartscaler-inference.yaml
 
 # Add the grafana dashboard for HPA
