@@ -1,16 +1,16 @@
 # Setup
 
-🚀 Make sure cluster autoscaling (adding/deleting of the nodes) is turned on, to accommodate variable load traffic."
+🚀 Make sure cluster autoscaling (adding/deleting of the nodes) is turned on, to accommodate variable load traffic.
 <br>
-📦 Make sure the nodes have enough capacity."
+📦 Make sure the nodes have enough capacity.
 <br>
-🔀 Include examples to port-forward Grafana svc. For example: kubectl port-forward svc/grafana 3000:3000 -n grafana"
+🔀 Include examples to port-forward Grafana svc. For example: kubectl port-forward svc/grafana 3000:3000 -n grafana
 <br>
 🎯 Make sure that Prometheus is configured to scrape data from pushgateway and istio (as a target source)
 <br>
-🔗 Change the prometheus and pushgw urls in override config file"
+🔗 Change the prometheus and pushgw urls in override config file
 <br>
-🔗 Please ensure to change the image name in smartscaler-inference.yaml"
+🔗 Please ensure to change the image name in smartscaler-inference.yaml
 
 ## Cluster Setup
 
@@ -78,5 +78,5 @@ Grafana is used for monitoring. It has two points of access:
 
 - Have 1 cluster to setup Bookinfo HPA and another cluster with Smart-scaler.
 - In the Script, there is an option to setup the cluster with Smart-scaler.
-  `Do you want to continue with the installation of smart-scaler? (yes/no)"`
+  `Do you want to continue with the installation of smart-scaler? (yes/no)`
 - If you choose yes, then it will install the smart-scaler in the cluster.
