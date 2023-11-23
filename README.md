@@ -1,8 +1,31 @@
-# README
+# Setup
 
-## Setup
+🚀 Make sure cluster autoscaling (adding/deleting of the nodes) is turned on, to accommodate variable load traffic."
+📦 Make sure the nodes have enough capacity."
+🔀 Include examples to port-forward Grafana svc. For example: kubectl port-forward svc/grafana 3000:3000 -n grafana"
+🎯 Make sure that Prometheus is configured to scrape data from pushgateway and istio (as a target source)"
+🔗 Change the prometheus and pushgw urls in override config file"
+🔗 Please ensure to change the image name in smartscaler-inference.yaml"
 
-### Kubernetes and KEDA Version Compatibility
+## Cluster Setup
+
+🖥️ Capacity:
+
+- CPU: 4CPU
+- Ephemeral Storage: 52,416,492Ki
+- Memory: 16,181,724Ki
+- Pods: 58
+- node.kubernetes.io/instance-type=t3.xlarge
+
+📊 Allocatable:
+
+- CPU: 3920 mCPU
+- Ephemeral Storage: 47,233,329,7124
+- Memory: 15,164,892Ki
+- Pods: 58
+- node.kubernetes.io/instance-type=t3.xlarge
+
+## Kubernetes and KEDA Version Compatibility
 
 Choose the KEDA version based on your Kubernetes (eks/k8s) version:
 
@@ -26,7 +49,7 @@ Grafana is used for monitoring. It has two points of access:
 
 1. To feed data into Grafana.
 2. To access Grafana to visualize the data.
-   For example, you can use port-forward to access Grafana. However, do not use port-forward for the boutique.
+   For example, you can use port-forward to access Grafana. However, do not use port-forward for the bookinfo.
 
 ### Grafana Datasource Setup
 
@@ -46,14 +69,9 @@ Grafana is used for monitoring. It has two points of access:
 3. Upload the Smart_Scaler_Dashboard.json file from the files directory.
    ![Image Description](./files/upload_dashboard.png)
 
-# Cluster Setup
+## Script Notes
 
-- In a single cluster, set up the smart-scaler and your application. Expose the services as needed.
-
-Once you have the setup working, it is recommended to enable xtrace for debugging:
-
-Docker Repository
-The first argument ($1) of the bash script should be the URL of your Docker repository. For example, if you have a local repository named foobar, pass it as a parameter:
-
-Note
-The initial part of the setup involves configuring what you already have with the correct versions. If you already have the necessary setup, you can skip this part.
+- Have 1 cluster to setup Bookinfo HPA and another cluster with Smart-scaler.
+- In the Script, there is an option to setup the cluster with Smart-scaler.
+  `Do you want to continue with the installation of smart-scaler? (yes/no)"`
+- If you choose yes, then it will install the smart-scaler in the cluster.
