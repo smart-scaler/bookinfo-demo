@@ -1,6 +1,6 @@
 # Readme:
-# 1. Make sure cluster autoscaling (adding/deleting of the nodes) is turned on, to accommodate variable load traffic.
-# 📦 2. Make sure the nodes have enough capacity.
+# 1. Ensure cluster autoscaling (adding/deleting of the nodes) is turned on, to accommodate variable load traffic.
+# 📦 2. Ensure the nodes have enough capacity.
 # 🔧 3. Install keda based on your eks/k8s version.
 #    KEDA   Kubernetes
 #    v2.11  v1.25 - v1.27
@@ -10,24 +10,26 @@
 #    v2.7   v1.17 - v1.25
 #    For k8s v1.27, use: helm install keda kedacore/keda --namespace keda --version 2.11
 # 🔀 4. Include examples to port-forward Grafana svc. For example: kubectl port-forward svc/grafana 3000:3000 -n grafana
-# 🎯 5. Make sure that Prometheus is configured to scrape data from pushgateway and istio (as a target source)
+# 🎯 5. Ensure that Prometheus is configured to scrape data from pushgateway and istio (as a target source)
 # 6. Change the prometheus and pushgw urls in override config file
-# 🖥️ Capacity:
+# 🖥️ Required Spec:
 #   - CPU: 4
 #   - Ephemeral Storage: 52,416,492Ki
 #   - Memory: 16,181,724Ki
 #   - Pods: 58
+#   - node.kubernetes.io/instance-type=t3.xlarge
 
 # 📊 Allocatable:
 #   - CPU: 3920m
 #   - Ephemeral Storage: 47,233,329,7124
 #   - Memory: 15,164,892Ki
 # - Pods: 58
-
+# - node.kubernetes.io/instance-type=t3.xlarge
 #!/bin/bash
 
 set -o xtrace
 
+# Might not be needed for local repo
 DOCKER_USER="<docker-username>"
 DOCKER_PASS="<docker-password>"
 
@@ -140,6 +142,7 @@ echo "Creating namespace smart-scaler..."
 kubectl create ns smart-scaler
 
 echo "Creating docker registry secret..."
+# Comment out the below line if local repo doesn't require a pull secret
 kubectl create secret docker-registry avesha-docker --namespace smart-scaler --docker-username=${DOCKER_USER} --docker-password=${DOCKER_PASS}
 
 echo "Creating configmap from file..."
