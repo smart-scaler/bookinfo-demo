@@ -5,6 +5,34 @@
 📦 Ensure the nodes have enough capacity.
 <br>
 🎯 Ensure that Prometheus is configured to scrape data from pushgateway and istio (as a target source)
+
+Sample code is included in install.sh for your reference.
+
+```python
+# Check if Istio metrics are available in Prometheus
+# change the prometheus url if needed
+prometheus_url="http://localhost:9090/api/v1/query"
+istio_metric_query='istio_request_duration_seconds_sum'
+response=$(curl -s "$prometheus_url" --data-urlencode "query=$istio_metric_query")
+
+if [[ $response == *"data"* ]]; then
+ echo "Istio metrics are available in Prometheus."
+else
+ echo "Istio metrics are not available in Prometheus."
+fi
+
+# Check if Pushgateway is a target source in Prometheus
+# change the prometheus url if needed
+prometheus_targets_url="http://localhost:9090/api/v1/targets"
+targets=$(curl -s "$prometheus_targets_url")
+
+if [[ $targets == *"pushgateway"* ]]; then
+ echo "Pushgateway is a target source in Prometheus."
+else
+ echo "Pushgateway is not a target source in Prometheus."
+fi
+```
+
 <br>
 🔗 Change the prometheus and pushgw urls in override config file located at https://github.com/smart-scaler/bookinfo-demo/blob/main/files/override_config.json
 
