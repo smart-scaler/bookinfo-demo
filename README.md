@@ -7,6 +7,7 @@
 🎯 Ensure that Prometheus is configured to scrape data from pushgateway and istio (as a target source)
 <br>
 🔗 Change the prometheus and pushgw urls in override config file located at https://github.com/smart-scaler/bookinfo-demo/blob/main/files/override_config.json
+
 ```json
 "database": {
                             "name": "prometheus",
@@ -14,8 +15,25 @@
                             "saas": false
                         },
 ```
+
 <br>
 🔗 Change the image name in smartscaler-inference.yaml to point to appropriate repo
+
+<br>
+🔗 Ensure that the smart-scaler image's digest is the same as the one mentioned below.
+
+```yaml
+docker images --digests | grep "fcd5f027a3026da320095238504fa362437aa146f6b3618731c1ed224816ef9b"
+aveshasystems/smart-scaler   v0.6.1    sha256:fcd5f027a3026da320095238504fa362437aa146f6b3618731c1ed224816ef9b   63f9d6629b3b   3 hours ago    5.49GB
+```
+
+🚀 Run the install.sh script to setup the cluster with smart-scaler or HPA.
+
+```bash
+bash ./install.sh
+```
+
+🔗 demo-xtrace.log can be used as a reference to see the logs of the demo.
 
 ## Cluster Setup
 
