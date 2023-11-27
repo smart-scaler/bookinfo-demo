@@ -24,7 +24,7 @@ spec:
             name: config-override
       containers:
         - name: autoscaler
-          image: aveshasystems/smart-scaler:v0.6.1
+          image: aveshasystems/smart-scaler:v0.6.1 # Change this to match the local repo, remove imagePullSecrets below (line 45) if not needed 
           imagePullPolicy: IfNotPresent
           command: ["/bin/sh", "-c"]
           args:
@@ -42,7 +42,7 @@ spec:
           ports:
             - containerPort: 9900
             - containerPort: 8265
-      imagePullSecrets:
+      imagePullSecrets: # Remove this if secret is not needed to pull the repo
         - name: avesha-docker
       #terminationGracePeriodSeconds: 30
       # nodeSelector:
