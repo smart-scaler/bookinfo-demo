@@ -6,7 +6,7 @@
 <br>
 🎯 Ensure that Prometheus is configured to scrape data from pushgateway and istio (as a target source)
 
-Sample code is included in install.sh for your reference.
+📦 Sample code is included in install.sh for your reference.
 
 ```python
 # Check if Istio metrics are available in Prometheus
