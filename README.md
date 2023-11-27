@@ -7,13 +7,13 @@
 🎯 Ensure that Prometheus is configured to scrape data from pushgateway and istio (as a target source)
 <br>
 🔗 Change the prometheus and pushgw urls in override config file located at https://github.com/smart-scaler/bookinfo-demo/blob/main/files/override_config.json
-
+```json
 "database": {
                             "name": "prometheus",
                             "url": "http://prometheus-stack-kube-prom-prometheus.monitoring.svc.cluster.local:9090",
                             "saas": false
                         },
-
+```
 <br>
 🔗 Change the image name in smartscaler-inference.yaml to point to appropriate repo
 
