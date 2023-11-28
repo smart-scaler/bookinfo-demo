@@ -75,7 +75,7 @@
                     "failed_reqs_percentage": {
                         "pod_cap_csv_path": "/home/avesha/rl/rlautoscaler/notebooks/csv_data/default_podcapacities.csv",
                         "pod_cap_model": "default",
-                        "rps_capacity_per_pod": 11.855613216863135,
+                        "rps_capacity_per_pod": 12,
                         "max": 1,
                         "min": 0
                     }
@@ -106,7 +106,7 @@
                                     "upper_bound_scaling": 1.5,
                                     "lower_bound_scaling": 0.7
                                 },
-                                "rps_capacity_per_pod": 11.855613216863135,
+                                "rps_capacity_per_pod": 12,
                                 "rps_csv_path": "/data/pse_results/bookinfo-data/productpage-v1/rps.csv",
                                 "pod_cap_csv_path": "/data/pse_results/bookinfo-data/productpage-v1/podcapacities.csv",
                                 "pod_cap_model": "default",
@@ -300,7 +300,7 @@
                     "failed_reqs_percentage": {
                         "pod_cap_csv_path": "/home/avesha/rl/rlautoscaler/notebooks/csv_data/default_podcapacities.csv",
                         "pod_cap_model": "default",
-                        "rps_capacity_per_pod": 11.855613216863135,
+                        "rps_capacity_per_pod": 12,
                         "max": 1,
                         "min": 0
                     }
@@ -331,7 +331,7 @@
                                     "upper_bound_scaling": 1.5,
                                     "lower_bound_scaling": 0.7
                                 },
-                                "rps_capacity_per_pod": 11.855613216863135,
+                                "rps_capacity_per_pod": 12,
                                 "rps_csv_path": "/data/pse_results/bookinfo-data/productpage-v1/rps.csv",
                                 "pod_cap_csv_path": "/data/pse_results/bookinfo-data/productpage-v1/podcapacities.csv",
                                 "pod_cap_model": "default",
@@ -750,7 +750,7 @@
                     "failed_reqs_percentage": {
                         "pod_cap_csv_path": "/home/avesha/rl/rlautoscaler/notebooks/csv_data/default_podcapacities.csv",
                         "pod_cap_model": "default",
-                        "rps_capacity_per_pod": 11.855613216863135,
+                        "rps_capacity_per_pod": 12,
                         "max": 1,
                         "min": 0
                     }
@@ -781,7 +781,7 @@
                                     "upper_bound_scaling": 1.5,
                                     "lower_bound_scaling": 0.7
                                 },
-                                "rps_capacity_per_pod": 11.855613216863135,
+                                "rps_capacity_per_pod": 12,
                                 "rps_csv_path": "/data/pse_results/bookinfo-data/productpage-v1/rps.csv",
                                 "pod_cap_csv_path": "/data/pse_results/bookinfo-data/productpage-v1/podcapacities.csv",
                                 "pod_cap_model": "default",
@@ -975,7 +975,7 @@
                     "failed_reqs_percentage": {
                         "pod_cap_csv_path": "/home/avesha/rl/rlautoscaler/notebooks/csv_data/default_podcapacities.csv",
                         "pod_cap_model": "default",
-                        "rps_capacity_per_pod": 108.44073793709816,
+                        "rps_capacity_per_pod": 25,
                         "max": 1,
                         "min": 0
                     }
@@ -1006,7 +1006,7 @@
                                     "upper_bound_scaling": 1.5,
                                     "lower_bound_scaling": 0.7
                                 },
-                                "rps_capacity_per_pod": 108.44073793709816,
+                                "rps_capacity_per_pod": 25,
                                 "rps_csv_path": "/data/pse_results/bookinfo-data/reviews-v1/rps.csv",
                                 "pod_cap_csv_path": "/data/pse_results/bookinfo-data/reviews-v1/podcapacities.csv",
                                 "pod_cap_model": "default",
@@ -1200,7 +1200,7 @@
                     "failed_reqs_percentage": {
                         "pod_cap_csv_path": "/home/avesha/rl/rlautoscaler/notebooks/csv_data/default_podcapacities.csv",
                         "pod_cap_model": "default",
-                        "rps_capacity_per_pod": 11.855613216863135,
+                        "rps_capacity_per_pod": 12,
                         "max": 1,
                         "min": 0
                     }
@@ -1231,7 +1231,7 @@
                                     "upper_bound_scaling": 1.5,
                                     "lower_bound_scaling": 0.7
                                 },
-                                "rps_capacity_per_pod": 11.855613216863135,
+                                "rps_capacity_per_pod": 12,
                                 "rps_csv_path": "/data/pse_results/bookinfo-data/productpage-v1/rps.csv",
                                 "pod_cap_csv_path": "/data/pse_results/bookinfo-data/productpage-v1/podcapacities.csv",
                                 "pod_cap_model": "default",
@@ -1425,7 +1425,7 @@
                     "failed_reqs_percentage": {
                         "pod_cap_csv_path": "/home/avesha/rl/rlautoscaler/notebooks/csv_data/default_podcapacities.csv",
                         "pod_cap_model": "default",
-                        "rps_capacity_per_pod": 26.796532686041846,
+                        "rps_capacity_per_pod": 25,
                         "max": 1,
                         "min": 0
                     }
@@ -1456,7 +1456,7 @@
                                     "upper_bound_scaling": 1.5,
                                     "lower_bound_scaling": 0.7
                                 },
-                                "rps_capacity_per_pod": 26.796532686041846,
+                                "rps_capacity_per_pod": 25,
                                 "rps_csv_path": "/data/pse_results/bookinfo-data/reviews-v2/rps.csv",
                                 "pod_cap_csv_path": "/data/pse_results/bookinfo-data/reviews-v2/podcapacities.csv",
                                 "pod_cap_model": "default",
@@ -1650,7 +1650,7 @@
                     "failed_reqs_percentage": {
                         "pod_cap_csv_path": "/home/avesha/rl/rlautoscaler/notebooks/csv_data/default_podcapacities.csv",
                         "pod_cap_model": "default",
-                        "rps_capacity_per_pod": 20.116333507725194,
+                        "rps_capacity_per_pod": 25,
                         "max": 1,
                         "min": 0
                     }
@@ -1681,7 +1681,7 @@
                                     "upper_bound_scaling": 1.5,
                                     "lower_bound_scaling": 0.7
                                 },
-                                "rps_capacity_per_pod": 20.116333507725194,
+                                "rps_capacity_per_pod": 25,
                                 "rps_csv_path": "/data/pse_results/bookinfo-data/reviews-v3/rps.csv",
                                 "pod_cap_csv_path": "/data/pse_results/bookinfo-data/reviews-v3/podcapacities.csv",
                                 "pod_cap_model": "default",
@@ -2100,7 +2100,7 @@
                     "failed_reqs_percentage": {
                         "pod_cap_csv_path": "/home/avesha/rl/rlautoscaler/notebooks/csv_data/default_podcapacities.csv",
                         "pod_cap_model": "default",
-                        "rps_capacity_per_pod": 11.855613216863135,
+                        "rps_capacity_per_pod": 12,
                         "max": 1,
                         "min": 0
                     }
@@ -2131,7 +2131,7 @@
                                     "upper_bound_scaling": 1.5,
                                     "lower_bound_scaling": 0.7
                                 },
-                                "rps_capacity_per_pod": 11.855613216863135,
+                                "rps_capacity_per_pod": 12,
                                 "rps_csv_path": "/data/pse_results/bookinfo-data/productpage-v1/rps.csv",
                                 "pod_cap_csv_path": "/data/pse_results/bookinfo-data/productpage-v1/podcapacities.csv",
                                 "pod_cap_model": "default",
