@@ -780,7 +780,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "((sum(rate(container_cpu_usage_seconds_total{container=~\".*[A-Za-z0-9].*|!POD\",pod=~\"$pod.*\"}[120s])))/ sum(kube_pod_container_resource_requests{container=~\".*[A-Za-z0-9].*|!POD\",pod=~\"$pod.*\", resource=\"cpu\"}))",
+          "expr": "((sum(rate(container_cpu_usage_seconds_total{container=~\".*[A-Za-z0-9].*|!POD\",pod=~\"$pod.*\"}[120s])))/ sum(kube_pod_container_resource_requests{container=~\".*[A-Za-z0-9].*|!POD\",pod=~\"$pod.*\", resource=\"cpu\"}))*100",
           "hide": false,
           "interval": "",
           "legendFormat": "$pod cpu utilization %",
