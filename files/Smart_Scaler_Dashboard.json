@@ -588,7 +588,7 @@
         ]
       },
       "gridPos": {
-        "h": 5,
+        "h": 7,
         "w": 19,
         "x": 0,
         "y": 8
@@ -654,7 +654,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 5,
+        "h": 7,
         "w": 5,
         "x": 19,
         "y": 8
@@ -753,10 +753,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 5,
+        "h": 8,
         "w": 19,
         "x": 0,
-        "y": 13
+        "y": 15
       },
       "id": 15,
       "options": {
@@ -815,10 +815,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 5,
+        "h": 8,
         "w": 5,
         "x": 19,
-        "y": 13
+        "y": 15
       },
       "id": 34,
       "options": {
@@ -856,171 +856,6 @@
         }
       ],
       "title": "$pod: Pod CPU Request",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "datasource",
-        "uid": "-- Mixed --"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": true,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 5,
-        "w": 19,
-        "x": 0,
-        "y": 18
-      },
-      "id": 37,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "multi",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "8.4.4",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "editorMode": "code",
-          "exemplar": true,
-          "expr": "((sum(rate(container_cpu_usage_seconds_total{container=~\".*[A-Za-z0-9].*|!POD\",pod=~\"$pod.*\"}[120s])))/ sum(kube_pod_container_resource_requests{container=~\".*[A-Za-z0-9].*|!POD\",pod=~\"$pod.*\", resource=\"cpu\"}))",
-          "hide": true,
-          "interval": "",
-          "legendFormat": "$pod cpu utilization",
-          "range": true,
-          "refId": "B"
-        }
-      ],
-      "title": "Pod Memory Utilisation",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "datasource",
-        "uid": "-- Mixed --"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 5,
-        "w": 5,
-        "x": 19,
-        "y": 18
-      },
-      "id": 38,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "sum"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {
-          "valueSize": 60
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "9.3.6",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "sum(kube_pod_container_resource_requests{container=~\".*[A-Za-z0-9].*|!POD\",pod=~\"$pod.*\",resource=\"cpu\"})/(sum(kube_pod_status_ready{pod=~\"$pod.+\"}))",
-          "format": "time_series",
-          "hide": true,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "$pod: Aggregate Pod Minutes",
-          "refId": "A"
-        }
-      ],
-      "title": "$pod: Pod Memory Request",
       "type": "stat"
     }
   ],
@@ -1076,13 +911,13 @@
     ]
   },
   "time": {
-    "from": "now-12h",
+    "from": "now-24h",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "browser",
   "title": "SmartScaler",
   "uid": "BrXBBUC7k-simulate-latest",
-  "version": 2,
+  "version": 1,
   "weekStart": ""
 }
