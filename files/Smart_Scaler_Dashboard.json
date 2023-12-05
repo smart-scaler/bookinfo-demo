@@ -301,7 +301,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "hpa_num_pods{job=\"$pod\",  kubernetes_pod_name=\"$pod\"}\r\n",
+          "expr": "hpa_num_pods{kubernetes_pod_name=\"$pod\"}\r\n",
           "hide": false,
           "interval": "",
           "legendFormat": "Num Pods by SmartScaler",
@@ -327,7 +327,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "predicted_rps{job=\"$pod\"} offset -1m",
+          "expr": "predicted_rps{kubernetes_pod_name=\"$pod\"} offset -1m",
           "hide": false,
           "interval": "",
           "legendFormat": "Predicted RPS",
