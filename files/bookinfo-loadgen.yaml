@@ -89,6 +89,8 @@ data:
         step_time = 60
         def tick(self):
             run_time = self.get_run_time()
+            if run_time > 10800:
+                exit()
             current_user = run_time //60
             from math import sin, cos
             user_num = int(240+ 36*(cos(4*current_user/6) + (5*sin(4*current_user/30))))
