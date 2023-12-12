@@ -301,7 +301,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "hpa_num_pods{job=\"$pod\",  kubernetes_pod_name=\"$pod\"}\r\n",
+          "expr": "hpa_num_pods{kubernetes_pod_name=\"$pod\"}\r\n",
           "hide": false,
           "interval": "",
           "legendFormat": "Num Pods by SmartScaler",
@@ -327,7 +327,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "predicted_rps{job=\"$pod\"} offset -1m",
+          "expr": "predicted_rps{kubernetes_pod_name=\"$pod\"} offset -1m",
           "hide": false,
           "interval": "",
           "legendFormat": "Predicted RPS",
@@ -780,7 +780,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "((sum(rate(container_cpu_usage_seconds_total{container=~\".*[A-Za-z0-9].*|!POD\",pod=~\"$pod.*\"}[120s])))/ sum(kube_pod_container_resource_requests{container=~\".*[A-Za-z0-9].*|!POD\",pod=~\"$pod.*\", resource=\"cpu\"}))",
+          "expr": "((sum(rate(container_cpu_usage_seconds_total{container=~\".*[A-Za-z0-9].*|!POD\",pod=~\"$pod.*\"}[120s])))/ sum(kube_pod_container_resource_requests{container=~\".*[A-Za-z0-9].*|!POD\",pod=~\"$pod.*\", resource=\"cpu\"}))*100",
           "hide": false,
           "interval": "",
           "legendFormat": "$pod cpu utilization %",
