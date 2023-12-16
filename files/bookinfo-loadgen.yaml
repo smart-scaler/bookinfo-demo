@@ -1,21 +1,16 @@
 ---
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: batch/v1
+kind: Job
 metadata:
   name: bookinfo-locust
   namespace: demo
 spec:
-  selector:
-    matchLabels:
-      app: bookinfo-locust
-  replicas: 1
   template:
     metadata:
-      labels:
-        app: bookinfo-locust
+      annotations:
+        sidecar.istio.io/inject: "false"
     spec:
-      terminationGracePeriodSeconds: 5
-      restartPolicy: Always
+      restartPolicy: Never
       volumes:
         - name: bookinfo-locustfile
           configMap:
@@ -35,6 +30,7 @@ spec:
               "/mnt/locust/locustfile.py",
               "--headless",
               "--host=http://productpage.demo.svc.cluster.local:9080",
+              "--run-time=3h",
             ]
           resources:
             requests:
@@ -62,6 +58,12 @@ data:
     #import rlautoscaler.utils.logger as Log
     import logging as log
 
+    from locust import events
+
+    @events.quitting.add_listener
+    def _(environment, **kw):
+        environment.process_exit_code = 0
+
     class UserTasks(TaskSet):
         """
         Locust user task set.
@@ -86,11 +88,13 @@ data:
         """
         docstring
         """
+        use_common_options = True
         step_time = 60
         def tick(self):
+            expected_run_time = self.runner.environment.parsed_options.run_time
+            if self.get_run_time() > expected_run_time:
+                return None
             run_time = self.get_run_time()
-            if run_time > 10800:
-                exit()
             current_user = run_time //60
             from math import sin, cos
             user_num = int(240+ 36*(cos(4*current_user/6) + (5*sin(4*current_user/30))))
