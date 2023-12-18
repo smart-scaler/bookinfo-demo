@@ -89,5 +89,8 @@ kubectl delete ns keda
 
 istioctl uninstall --purge
 
+echo "🚧 Deleting namespace istio-system..."
+kubectl delete ns istio-system
+
 
 set +x
