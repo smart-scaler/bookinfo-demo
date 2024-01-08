@@ -1025,7 +1025,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(sum_over_time(kube_node_info{}[$__range]))/2",
+          "expr": "sum(sum_over_time(kube_node_info{}[$__range]))/4",
           "instant": true,
           "interval": "",
           "legendFormat": "Node Minutes",
